@@ -14,13 +14,15 @@ const router = express.Router();
 const rootDir = require('../util/cust-paths');
 
 // Import the product controller from products.js
-const productsController = require('../controllers/products');
+const adminController = require('../controllers/admin');
 
 // Use router instead of app
-router.get('/add-product', productsController.getAddProduct);
+router.get('/add-product', adminController.getAddProduct);
+
+router.get('/products', adminController.getProducts);
 
 // Use router instead of app
-router.post('/add-product', productsController.postAddProduct);
+router.post('/add-product', adminController.postAddProduct);
 
 // Export the router
 module.exports = router;

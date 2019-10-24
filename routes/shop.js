@@ -11,10 +11,18 @@ const path = require('path'); // this is nodeJs core module
 const router = express.Router();
 
 // Import the product controller from products.js
-const productsController = require('../controllers/products');
+const shopController = require('../controllers/shop');
 
 // Use router instead of app
-router.get('/', productsController.getProducts);
+router.get('/', shopController.getIndex);
+
+router.get('/products', shopController.getProducts);
+
+router.get('/cart', shopController.getCart);
+
+router.get('/orders', shopController.getOrders);
+
+router.get('/checkout', shopController.getCheckout);
 
 // Export the router
 module.exports = router;

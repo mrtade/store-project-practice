@@ -14,9 +14,13 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
     console.log(`item to save: ${req.body.title}`);
-    
+    const title = req.body.title;
+    const imageUrl = req.body.imageUrl;
+    const price = req.body.price;
+    const description = req.body.description;
+
     // use the Products class in models
-    const product = new Products(req.body.title);
+    const product = new Products(title, imageUrl, description, price);
     product.save();
 
     res.redirect('/');
@@ -24,15 +28,12 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
     Products.fetchAll((products) => {
-        console.log('This is the getProducts fetchAll:', products);
-        res.render('shop/product-list', 
-        {
-          pageTitle: 'Shop',
-          prods: products,
-          path: '/'
-        });
-    });
-
-    //path.join allows to point to the required directory starting from the absolute directory
-    // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-};
+      console.log('getIndex fetchAll:', products);
+      res.render('admin/products', 
+      {
+        pageTitle: 'Admin Products',
+        prods: products,
+        path: '/admin/products'
+      });
+  });
+  };
