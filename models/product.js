@@ -7,11 +7,11 @@ const getProductsFromFile = (cb) => {
 
     fs.readFile(fileDir, (err, data) => {
         if (err) {
-            console.log('This is the readFile error', err);
+            // console.log('This is the readFile error', err);
             cb([]);
         } else {
-        console.log('This is the file content: ', data);
-        console.log('This is the post parse file content: ', JSON.parse(data));
+        // console.log('This is the file content: ', data);
+        // console.log('This is the post parse file content: ', JSON.parse(data));
         cb(JSON.parse(data));
         }
     });
@@ -28,12 +28,13 @@ module.exports = class Product {
     }
 
     save() {
+        this.id = Math.round((Math.random()*100000)).toString();
         getProductsFromFile(products => {
             products.push(this);
-            console.log('This is the updated products array:', products);
+            // console.log('This is the updated products array:', products);
 
             fs.writeFile(fileDir,JSON.stringify(products), (err) => {
-                console.log(err);
+                // console.log(err);
             });
         });
     

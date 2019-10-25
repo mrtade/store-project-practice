@@ -3,7 +3,7 @@ const Products = require('../models/product');
 
 exports.getProducts = (req, res, next) => {
     Products.fetchAll((products) => {
-        console.log('getProducts fetchAll:', products);
+        // console.log('getProducts fetchAll:', products);
         res.render('shop/product-list', 
         {
           pageTitle: 'All products',
@@ -14,9 +14,15 @@ exports.getProducts = (req, res, next) => {
 
 };
 
+exports.getProduct = (req, res, next) => {
+  const prodId = req.params.productId;
+  console.log(`product id: ${prodId}`);
+  res.redirect('/');
+};
+
 exports.getIndex = (req, res, next) => {
   Products.fetchAll((products) => {
-    console.log('getIndex fetchAll:', products);
+    // console.log('getIndex fetchAll:', products);
     res.render('shop/index', 
     {
       pageTitle: 'Shop',
