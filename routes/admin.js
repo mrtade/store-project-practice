@@ -24,5 +24,9 @@ router.get('/products', adminController.getProducts);
 // Use router instead of app
 router.post('/add-product', adminController.postAddProduct);
 
+router.get('/edit-product/:productId', adminController.getEditProduct);
+
+router.post('/edit-product');
+
 // Export the router
 module.exports = router;
