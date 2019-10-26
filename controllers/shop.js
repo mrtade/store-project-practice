@@ -1,5 +1,6 @@
 // Import the Product class from models
 const Products = require('../models/product');
+const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
     Products.fetchAll((products) => {
@@ -49,6 +50,10 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   console.log(prodId);
+  Products.findById(prodId, (product) => {
+    Cart.addProduct(prodId, product.price);
+  });
+  res.redirect('/');
 };
 
 exports.getOrders = (req, res, next) => {
