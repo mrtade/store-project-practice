@@ -1,4 +1,4 @@
-<%- include('../includes/header.ejs') %>
+<%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/product.css">
 </head>
 
@@ -22,10 +22,7 @@
                             <p class="product__description"><%= product.description %></p>
                         </div>
                         <div class="card__actions">
-                                <form action="/cart" method="POST">
-                                    <button class="btn" type="submit">Add to Cart</button>
-                                    <input type="hidden" name="productId" value="<%= product.id %>">
-                                </form>
+                            <%- include('../includes/add-to-cart.ejs', {product: product}) %>
                         </div>
                     </article>
                 <% } %>
@@ -34,4 +31,4 @@
             <h1>No Products Found!</h1>
         <% } %>
     </main>
-<%- include('../includes/footer.ejs') %>
+<%- include('../includes/end.ejs') %>
