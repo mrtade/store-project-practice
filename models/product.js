@@ -30,20 +30,15 @@ module.exports = class Product {
     });
   }
 
-  static deleteById(id) {
-    getProductsFromFile(products => {
-      const product = products.find(prod => prod.id === id);
-      const updatedProducts = products.filter(prod => prod.id !== id);
-      fs.writeFile(p, JSON.stringify(updatedProducts), err => {
-        if (!err) {
-          Cart.deleteProduct(id, product.price);
-        }
-      });
+  static fetchAll() {
+    const db = getDb();
+    return db.collection('products').find().toArray()
+    .then(products => {
+      console.log(products);
+      return products;
+    }).catch(err => {
+      console.log(err);
     });
-  }
-
-  static fetchAll(cb) {
-    getProductsFromFile(cb);
   }
 
   static findById(id, cb) {
