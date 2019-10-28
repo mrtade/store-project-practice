@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 
 const errorController = require('./controllers/error');
 
+// Require mongodb connection from the /util/database folder
+const mongoConnect = require('./util/database');
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -21,4 +24,11 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-app.listen(3000);
+// This is the callback function to spin-up the server only after connecting to the DB
+mongoConnect(client => {
+    console.log('Client:', client);
+    app.listen(3000);
+    console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
+    console.log('Server started on port 3000.');
+    console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
+});
