@@ -1,4 +1,5 @@
 const getDb = require('../util/database').getDb;
+const mongodb = require('mongodb'); // allows to use new mongodb.ObjectId on the _id
 const Cart = require('./cart');
 
 const getProductsFromFile = cb => {
@@ -32,7 +33,7 @@ module.exports = class Product {
 
   static fetchAll() {
     const db = getDb();
-    return db.collection('products').find().toArray()
+    return db.collection('products').find().toArray() // toArray is used here so we can get a promise
     .then(products => {
       console.log(products);
       return products;
@@ -41,10 +42,17 @@ module.exports = class Product {
     });
   }
 
-  static findById(id, cb) {
-    getProductsFromFile(products => {
-      const product = products.find(p => p.id === id);
-      cb(product);
+  static findById(prodId) {
+    const db = getDb();
+    return db.collection('products')
+    .find({ _id: new mongodb.ObjectId(prodId) }) // _id are saved as special mongodb ObjectId and this is how to convert a sting to the format the _id is stored on the DB
+    .next() // passes the result to the next function to allow us get a promise
+    .then(product => {
+      console.log(product);
+      return product;
+    })
+    .catch(err => {
+      console.log(err);
     });
   }
 };
