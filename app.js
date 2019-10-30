@@ -7,6 +7,7 @@ const errorController = require('./controllers/error');
 
 // Require mongodb connection from the /util/database folder
 const mongoConnect = require('./util/database').mongoConnect;
+const User = require('./models/user');
 
 const app = express();
 
@@ -18,6 +19,15 @@ const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res, next) => {
+    User.findById('5db78144d0f40a282475afae')
+        .then(user => {
+            req.user = new User(user.name, user.email, user.cart, user._id);
+            next();
+        })
+        .catch(err => console.log(err));
+});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

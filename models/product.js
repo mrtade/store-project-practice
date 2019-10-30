@@ -3,12 +3,13 @@ const mongodb = require('mongodb'); // allows to use new mongodb.ObjectId on the
 const Cart = require('./cart');
 
 module.exports = class Product {
-  constructor(title, imageUrl, description, price, id) {
+  constructor(title, imageUrl, description, price, id, userId) {
     this.title = title;
     this.imageUrl = imageUrl;
     this.description = description;
     this.price = price;
     this._id = id ? new mongodb.ObjectId(id) : null; // acts as a switch if or not this._id exists when creating
+    this.userId = userId; 
   }
 
   save() {
