@@ -1,53 +1,68 @@
-
-const fs = require('fs');
-const path = require('path');
-const fileDir = path.join(path.dirname(process.mainModule.filename),'data','products.json');
-
-const getProductsFromFile = (cb) => {
-
-    fs.readFile(fileDir, (err, data) => {
-        if (err) {
-            // console.log('This is the readFile error', err);
-            cb([]);
-        } else {
-        // console.log('This is the file content: ', data);
-        // console.log('This is the post parse file content: ', JSON.parse(data));
-        cb(JSON.parse(data));
-        }
-    });
-}
+const getDb = require('../util/database').getDb;
+const mongodb = require('mongodb'); // allows to use new mongodb.ObjectId on the _id
+const Cart = require('./cart');
 
 module.exports = class Product {
+  constructor(title, imageUrl, description, price, id, userId) {
+    this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
+    this._id = id ? new mongodb.ObjectId(id) : null; // acts as a switch if or not this._id exists when creating
+    this.userId = userId; 
+  }
 
-    constructor(title, imageUrl, description, price) {
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.price = price;
-        this.description = description;
-
+  save() {
+    const db = getDb();
+    let dbOp;
+    if (this._id) {
+      // Update an existing product
+      dbOp = db.collection('products').updateOne({ _id: this._id }, {$set: this});
+    } else {
+      // Insert a product
+      dbOp = db.collection('products').insertOne(this);
     }
+    return dbOp
+      .then(result => {
+        console.log(result);
+      })
+      .catch(err => {
+        console.log(err);
+    });
+  }
 
-    save() {
-        this.id = Math.round((Math.random()*100000)).toString();
-        getProductsFromFile(products => {
-            products.push(this);
-            // console.log('This is the updated products array:', products);
+  static fetchAll() {
+    const db = getDb();
+    return db.collection('products').find().toArray() // toArray is used here so we can get a promise
+    .then(products => {
+      console.log(products);
+      return products;
+    }).catch(err => {
+      console.log(err);
+    });
+  }
 
-            fs.writeFile(fileDir,JSON.stringify(products), (err) => {
-                // console.log(err);
-            });
-        });
-    
-    };
+  static findById(prodId) {
+    const db = getDb();
+    return db.collection('products')
+    .find({ _id: new mongodb.ObjectId(prodId) }) // _id are saved as special mongodb ObjectId and this is how to convert a sting to the format the _id is stored on the DB
+    .next() // passes the result to the next function to allow us get a promise
+    .then(product => {
+      console.log(product);
+      return product;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
 
-    static fetchAll(cb) {
-        getProductsFromFile(cb);
-    }
+  static deleteById(prodId) {
+    const db = getDb();
+    return db.collection('products').deleteOne({_id: new mongodb.ObjectId(prodId)})
+    .then(() => {
+      console.log(`Product ${new mongodb.ObjectId(prodId)} deleted`)
+    })
+    .catch(err => console.log(err));
+  }
 
-    static findById(id, cb) {
-        getProductsFromFile(products => {
-            const product = products.find(p => p.id === id);
-            cb(product);
-        });
-    }
 };

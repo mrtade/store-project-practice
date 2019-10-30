@@ -1,32 +1,24 @@
-/**EXPRESS-ROUTER IMPLEMENTATION TO SEPERATE YOUR WORK INTO MINI-EXPRESS MODULES - ADMIN ROUTE
- * Tap into the express module
- * Create constant router from the built-in express-Router
- * Then use router instead of app
- */
-
-const path = require('path'); 
+const path = require('path');
 
 const express = require('express');
 
-const router = express.Router();
-
-// Custom code pointing to the root directory
-const rootDir = require('../util/cust-paths');
-
-// Import the product controller from products.js
 const adminController = require('../controllers/admin');
 
-// Use router instead of app
+const router = express.Router();
+
+// /admin/add-product => GET
 router.get('/add-product', adminController.getAddProduct);
 
+// /admin/products => GET
 router.get('/products', adminController.getProducts);
 
-// Use router instead of app
+// /admin/add-product => POST
 router.post('/add-product', adminController.postAddProduct);
 
 router.get('/edit-product/:productId', adminController.getEditProduct);
 
-router.post('/edit-product');
+router.post('/edit-product', adminController.postEditProduct);
 
-// Export the router
+router.post('/delete-product', adminController.postDeleteProduct);
+
 module.exports = router;
