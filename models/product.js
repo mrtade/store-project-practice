@@ -1,6 +1,6 @@
 const getDb = require('../util/database').getDb;
 const mongodb = require('mongodb'); // allows to use new mongodb.ObjectId on the _id
-const Cart = require('./cart');
+// const Cart = require('./cart');
 
 module.exports = class Product {
   constructor(title, imageUrl, description, price, id, userId) {
