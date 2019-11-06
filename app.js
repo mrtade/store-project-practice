@@ -43,6 +43,8 @@ mongoose.connect('mongodb+srv://admin-mrtade:Momo123@cluster0-ft6tk.mongodb.net/
     app.listen(3000);
     // console.log(connection);
     console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
+    console.log('Database connection successful!');
+    console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
     console.log('Server started on port 3000.');
     console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
 })
