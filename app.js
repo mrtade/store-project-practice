@@ -22,14 +22,14 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next) => {
-//     User.findById('5db78144d0f40a282475afae')
-//         .then(user => {
-//             req.user = new User(user.name, user.email, user.cart, user._id);
-//             next();
-//         })
-//         .catch(err => console.log(err));
-// });
+app.use((req, res, next) => {
+    User.findById('5dc35cdda33d9b230481b685')
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err));
+});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -40,13 +40,29 @@ app.use(errorController.get404);
 
 mongoose.connect('mongodb+srv://admin-mrtade:Momo123@cluster0-ft6tk.mongodb.net/shopDB?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true })
 .then((connection) => {
-    app.listen(3000);
     // console.log(connection);
     console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
     console.log('Database connection successful!');
-    console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
+    User.findOne().then(user => {
+        if (!user) {
+            const user = new User({
+                name: 'Me',
+                email: 'me@test.com',
+                cart: {
+                    items: []
+                }
+            });
+            user.save();
+        }
+        console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
+        console.log(`Existing user "${user._id}" is connected!`);
+        console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
+
+    });
+
+    app.listen(3000);
+    console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'); 
     console.log('Server started on port 3000.');
-    console.log('*=*=*=*=*=*=*=*=*=*=*=*=*=*=*');
 })
 .catch((err) => {
     console.log(err);
