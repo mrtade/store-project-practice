@@ -3,6 +3,7 @@ exports.getLogin = (req, res, next) => {
     .get("Cookie")
     .trim()
     .split("=")[1];
+  console.log(req.session);
   res.render("auth/login", {
     path: "/login",
     pageTitle: "Login",
@@ -11,7 +12,8 @@ exports.getLogin = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
-  // Set a cookie using the setHeader method on response. Set-Cookie is a stored keyword, loggedIn=true is what we set
-  res.setHeader("Set-Cookie", "loggedIn=true");
+  // isLoggedIn can be called anything. Its a property added to req.session object as seen in the console log
+  // console.log(req.session);
+  req.session.isLoggedIn = true;
   res.redirect("/");
 };
