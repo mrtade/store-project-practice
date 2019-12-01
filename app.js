@@ -41,6 +41,24 @@ app.use(
     store: store
   })
 );
+/**
+ * Allow custom mongoose methods work again
+ * When logged in, fetch the current user id stored in the session
+ * We get the required mongoose model by storing the data in req.user
+ */
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);

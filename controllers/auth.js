@@ -18,7 +18,11 @@ exports.postLogin = (req, res, next) => {
     .then(user => {
       req.session.user = user;
       req.session.isLoggedIn = true;
-      res.redirect("/");
+      // Redirect when the session is confirmed saved on the database
+      req.session.save(err => {
+        console.log(err);
+        res.redirect("/");
+      });
     })
     .catch(err => console.log(err));
 };
